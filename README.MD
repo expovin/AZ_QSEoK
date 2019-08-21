@@ -17,4 +17,9 @@ Indicare le versioni
 ### Versione attuale
 ***v1.0*** Prima versione. Limiti conosciuti
 
+## Configurazione
+ Ci sono 2 file da configurare 
+ *** config.sh *** Impostazione del cluster su Azure
+ *** value.yaml *** Impostazione parametri IdP per il deployment QSEoK seguire le istruzioni riportate [qui]( https://help.qlik.com/en-US/sense/June2019/Subsystems/PlanningQlikSenseDeployments/Content/Sense_Deployment/auth0-setup.htm)
+
 
