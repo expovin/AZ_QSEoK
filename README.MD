@@ -41,8 +41,11 @@ There are a number of command line tools required. You need them to deploy an Az
 
 Indicare le versioni
 
-### Versione attuale
-***v1.0*** Prima versione. Limiti conosciuti
+### Know limits
+***Error handling*** Only the AKS enabling task check for the correct component registration. All ather steps assume the task run correctly.
+
+***RESOURCE_GROUP name*** are automatically assigned by Azure. I assumed it is build as "MC_"+RESOURCE_GROUP_NAME+"_"+CLUSTER_NAME+"_"+LOCATION from some empirical tests. Anyway the creation step check for the existence o such RESOURCE_GROUP_NAME, if it does not exist the script just exit. You can find the correct name and replace the variable AZ_DEFAULT_RESOURCE_GROUP value in the config.js file and run the script again
+
 
 ## Configurazione
  Ci sono 2 file da configurare 
