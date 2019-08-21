@@ -12,6 +12,10 @@ In  details the steps it runs are:
 8. Create a Storage Account
 9. Create Azure Storage
 10. Install QSEoK
+  - Add the Qlik repo for HELM and update it
+  - Install custom resource definitions used by dynamic engines
+  - Install Qlik Sense Engine package
+11. Get the cluster IP
 
 
 
