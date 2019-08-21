@@ -26,17 +26,18 @@ In  details the steps it runs are:
 These scripts are freely provided to speed up the Azure cluster deployment required by Qlik Sense Enterprise on Kubernetes (AKA QSEoK) for a test or Lab environment. The code are open such that anyone can check it before run. 
 
 The resourses creation may have cost impact, base on your subscription with Microsoft Azure.
+
 The resources deletation **does not ask for any confermation.**
+
 Run them at your own risk.
 
-Usate questo tool così com'è. Attenzione per lo script di creazione ai costi delle risorse e allo script di cancellazione a risorse nello stesso RESOURCE_GROUP.
-Non mi assumo nessuna responsabilità
-
 ### System requirements
-Command line tools 
- az
- kubectl
- helm
+
+There are a number of command line tools required. You need them to deploy an Azure cluster, install QSEoK and managing the environment even if you do not use these tools. The CLI required are:
+
+ - [az](https://docs.microsoft.com/it-it/cli/azure/install-azure-cli?view=azure-cli-latest)
+ - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+ - [helm](https://helm.sh/docs/using_helm/)
 
 Indicare le versioni
 
