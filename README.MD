@@ -44,12 +44,22 @@ Indicare le versioni
 ### Know limits
 ***Error handling*** Only the AKS enabling task check for the correct component registration. All ather steps assume the task run correctly.
 
-***RESOURCE_GROUP name*** are automatically assigned by Azure. I assumed it is build as "MC_"+RESOURCE_GROUP_NAME+"_"+CLUSTER_NAME+"_"+LOCATION from some empirical tests. Anyway the creation step check for the existence o such RESOURCE_GROUP_NAME, if it does not exist the script just exit. You can find the correct name and replace the variable AZ_DEFAULT_RESOURCE_GROUP value in the config.js file and run the script again
+***RESOURCE_GROUP name*** is automatically assigned by Azure. I assumed it is build as "MC_"+RESOURCE_GROUP_NAME+"_"+CLUSTER_NAME+"_"+LOCATION from some empirical tests. Anyway the creation step check for the existence o such RESOURCE_GROUP_NAME, if it does not exist the script just exit. You can find the correct name and replace the variable AZ_DEFAULT_RESOURCE_GROUP value in the config.js file and run the script again
 
+***OS*** these scripts are developed and tested on Linux Operating System. They are bash shell scripts, therefore they should run on any bash console including those on MacOS and bash simulator for Windows. Futhermore some OS may call the CLI command in a different way. This version does not provide the way to change the CLI command name, you should change the name in your OS or create simbolic link.
 
-## Configurazione
+***IdPs***. Only Auth0 has been tested. Anyway the ***value.yaml*** should work with any IdP
+
+## Configuration
+There are two configuration file to fill up before run the creation script, those file are:
+- value.yaml
+- config.sh
+
+### value.yaml
+The ***value.yaml*** file is required to install the QSEoK. You need to fill up the identity provider section. In order to do that you should complete the IdP configuration according to the [Qlik manual]( https://help.qlik.com/en-US/sense/June2019/Subsystems/PlanningQlikSenseDeployments/Content/Sense_Deployment/auth0-setup.htm)
+
  Ci sono 2 file da configurare 
  *** config.sh *** Impostazione del cluster su Azure
- *** value.yaml *** Impostazione parametri IdP per il deployment QSEoK seguire le istruzioni riportate [qui]( https://help.qlik.com/en-US/sense/June2019/Subsystems/PlanningQlikSenseDeployments/Content/Sense_Deployment/auth0-setup.htm)
+ *** value.yaml *** Impostazione parametri IdP per il deployment QSEoK seguire le istruzioni riportate 
 
 
