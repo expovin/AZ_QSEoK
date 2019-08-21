@@ -60,6 +60,7 @@ The ***value.yaml*** file is required to install the QSEoK. You need to fill up 
 Replace **YUOR_SERVER** with the DNS name for your QSEoK cluster. For test and Lab environment you can just add the Server name in your **hosts** file; ***AZ_CreateCluster.sh*** will show the cluster IP when the configuration has completed. 
 
 ### config.sh
-
+The **config.sh** sets the parameters for the Azure cluster:
+- **AZ_SUBSCRIPTION** : This is the subscription you want to use to charge from
 
 
