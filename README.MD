@@ -24,6 +24,7 @@ In  details the steps it runs are:
 
 ### Disclaimer
 These scripts are freely provided to speed up the Azure cluster deployment required by Qlik Sense Enterprise on Kubernetes (AKA QSEoK) for a test or Lab environment. The code are open such that anyone can check it before run. 
+
 The resourses creation may have cost impact, base on your subscription with Microsoft Azure.
 The resources deletation **does not ask for any confermation.**
 Run them at your own risk.
