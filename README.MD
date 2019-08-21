@@ -38,6 +38,8 @@ There are a number of command line tools required. You need them to deploy an Az
  - [az](https://docs.microsoft.com/it-it/cli/azure/install-azure-cli?view=azure-cli-latest)
  - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
  - [helm](https://helm.sh/docs/using_helm/)
+ 
+ Futhermore you need to own an Azure account with a valid subscription
 
 Indicare le versioni
 
@@ -61,6 +63,13 @@ Replace **YUOR_SERVER** with the DNS name for your QSEoK cluster. For test and L
 
 ### config.sh
 The **config.sh** sets the parameters for the Azure cluster:
-- **AZ_SUBSCRIPTION** : This is the subscription you want to use to charge from
+- **AZ_SUBSCRIPTION** : This is the subscription you want to use to charge from. You can yous either, the subscription name or ID
+- **TIME_OUT** : Represent the time (in seconds) waiting the AKS components registration
+- **AZ_RESOURCE_GROUP_NAME** : A name of your choice to design the group name where all resource 
+- **AZ_LOCATION** : Azure location where deploy your cluster. You can get the location details typing the command * *az account list-locations* * from the console. 
+- **AZ_CLUSTER_NAME** : A name of your choice to identify your cluster. You cannot exceed 63 characters and can only contain letters, numbers, or dashes (-).
+- **AZ_NODE_COUNT** : The number of nodes (Virtual Machines) in your cluster.
+- **AZ_DEFAULT_RESOURCE_GROUP** : Do not change this value unless you meet the problem described in the **know limits** section
+- **AZ_VM_SIZE** : Select the Virtual Machines size for each node. You can fine the list of all Azure VM Size [here](https://docs.microsoft.com/it-it/azure/virtual-machines/windows/sizes-general). To run Kubernetes there are some limits described [here](https://docs.microsoft.com/en-us/azure/aks/quotas-skus-regions#restricted-vm-sizes). The minimum size required to run QSEoK is **Standard_DS2_v2 **
 
 
