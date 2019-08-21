@@ -1,6 +1,9 @@
-# Azure cluster deployment scripts
+# QSEoK Azure cluster deployment scripts
 
-introduzione sul perchè uno script per la creazione e distruzione del cluster. Considerazione sui costi.
+The mechanic to deploy a Kubernetes cluster is a long, boring, error prone task. It is usually a one shot task for a production environment, it doesn't for test and lab purpose. On the other hand leave an environment up and running has costs, even when not in use. These scripts make the boring work to create and deploy a Kubernetes cluster on Azure and destroy it when not needed any more.
+In  details the steps it runs are:
+1. Login into Azure account
+2. Set the correct subscription
 
 ### Disclaimer
 Usate questo tool così com'è. Attenzione per lo script di creazione ai costi delle risorse e allo script di cancellazione a risorse nello stesso RESOURCE_GROUP.
