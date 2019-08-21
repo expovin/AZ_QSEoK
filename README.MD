@@ -4,6 +4,16 @@ The mechanic to deploy a Kubernetes cluster is a long, boring, error prone task.
 In  details the steps it runs are:
 1. Login into Azure account
 2. Set the correct subscription
+3. Enable AKS (waiting for the component registration)
+4. Create the Resource Group
+5. Create the Cluster (this step can take a long time)
+6. Get Credentials and Configure kubectl
+7. Set the Role Based Access Control (RBAC)
+8. Create a Storage Account
+9. Create Azure Storage
+10. Install QSEoK
+
+
 
 ### Disclaimer
 Usate questo tool così com'è. Attenzione per lo script di creazione ai costi delle risorse e allo script di cancellazione a risorse nello stesso RESOURCE_GROUP.
