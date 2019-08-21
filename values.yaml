@@ -1,0 +1,19 @@
+devMode:
+  enabled: true
+engine:
+  acceptEULA: "yes"
+
+global:
+  persistence:
+    storageClass: "azurefile"
+
+identity-providers:
+  secrets:
+    idpConfigs:
+      - discoveryUrl: "https://<YUOR_SERVER>/.well-known/openid-configuration"
+        clientId: "<YOUR_AUTH0_CLIENT_ID>"
+        clientSecret : "<YOUR_AUTH0_SECRET>"
+        realm: "Auth0"
+        hostname: "<YOUR_SERVER>"
+        claimsMapping:
+          client_id: [ "client_id", "<YOUR_CLIENT_ID>" ]      
