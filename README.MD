@@ -52,6 +52,8 @@ Indicare le versioni
 
 ***IdPs***. Only Auth0 has been tested. Anyway the ***value.yaml*** should work with any IdP
 
+*Any comment, bug or improvement request is wellcome.*
+
 ## Configuration
 There are two configuration file to fill up before run the creation script, those file are:
 - value.yaml
