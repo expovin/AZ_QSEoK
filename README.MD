@@ -64,18 +64,7 @@ Also, below a list of required command line tools, used to deploy an Azure clust
 
 *Any comment, bug or improvement request is wellcome.*
 
-
 ## Configuration
-There are two different way to run the Cluster Deployments:
-- **Supervised mode** : Requires you to login using your browser. You need to leave the terminal open till the end.
-- **Unattended mode** : Requires you to create a server-principal user for logging in. You can even schedule the script to run at a given time. To create the server principal user run into the console the following command
-
-```
-az ad sp create-for-rbac --name ClusterAutomation
-```
-
-and copy/paste the appId, password and tenant into **config.sh** file
-
 The scripts use two configuration files:
 - value.yaml
 - config.sh
@@ -109,3 +98,16 @@ The **config.sh** sets the parameters for the Azure cluster:
 - **QS_LICENSE** : Not used.
 
 
+## Creation Modes
+Clusters can be created in two distinct modes: 
+- **Supervised mode** : Requires a physical user to sign in using on a browser; you need to leave the terminal open until the end.
+- **Unattended mode** :  Allows for an automated sign-in (read: no human intervention, nor need for browser) intended to schedule the script to run autonomously. 
+
+In order to create the server principal user run into the console the following command
+
+
+```
+az ad sp create-for-rbac --name ClusterAutomation
+```
+
+and copy/paste the appId, password and tenant into **config.sh** file
