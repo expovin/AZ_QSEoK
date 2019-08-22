@@ -53,8 +53,6 @@ There are a number of command line tools required. You need them to deploy an Az
  
  Futhermore you need to own an Azure account with a valid subscription
 
-Indicare le versioni
-
 ### Know limits
 ***Error handling*** Only the AKS enabling task check for the correct component registration. All ather steps assume the task run correctly.
 
@@ -98,6 +96,11 @@ The **config.sh** sets the parameters for the Azure cluster:
 - **AZ_VM_SIZE** : Select the Virtual Machines size for each node. You can fine the list of all Azure VM Size [here](https://docs.microsoft.com/it-it/azure/virtual-machines/windows/sizes-general). To run Kubernetes there are some limits described [here](https://docs.microsoft.com/en-us/azure/aks/quotas-skus-regions#restricted-vm-sizes). The minimum size required to run QSEoK is **Standard_DS2_v2**
 - **AZ_ACCOUNT_NAME** : A name of your choice for the Account Name. Using between 3 - 24 characters in length and use numbers and lower-case letters only.
 - **AZ_SKU_TYPES** :  Sku type for storage. For a complete list of SKU type visiti [here](https://docs.microsoft.com/en-us/rest/api/storagerp/srp_sku_types). It is recomended to use **Standard_LRS** for QSEoK
+- **LOGIN_MODE** : Allow you to select between the supervised run (browser-interactive) or the unattended mode (service-principal). In order to run the task from a scheduler, you need to run the unattended mode
+      - **appId** : Service Principal appId
+      - **password** : Service Principal Password
+      - **tenant** : Service Principal tenant
+      
 - **HOST_NAME** : This host name will be added to the /etc/hosts with the correct cluster ip
 - **QS_LICENSE** : Not used.
 
