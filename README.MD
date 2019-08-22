@@ -1,7 +1,10 @@
 # QSEoK Azure cluster deployment scripts
 
-The procedure to deploy a Kubernetes cluster is generally a long, boring, error prone task. It is usually a one shot task for a production environment, it doesn't for test and lab purpose. On the other hand leave an environment up and running has costs, even when not in use. These scripts make the boring work to create and deploy a Kubernetes cluster on Azure and destroy it when not needed any more.
-In  details the steps it runs are:
+The procedure to deploy a Kubernetes cluster is generally a long, boring, error prone task, which is typically performed once in a production environment, whereas in test and lab is repeated many, many times. Standing up, running, and maintaining these environments have costs, even when not in use. 
+
+These scripts provide automatic lifecycle management of a Kubernetes cluster hosted on Azure, from its configuration, deployment, and decommissioning when no longer needed. 
+
+Below a brief explanation of the macro steps performed by each component/script:
 
 ***AZ_CreateCluster.sh***
 1. Login into Azure account
@@ -23,17 +26,14 @@ In  details the steps it runs are:
 - Destroy all resources belonging to the same RESOURCE_GROUP.
 
 ### Disclaimer
-These scripts are freely provided to speed up the Azure cluster deployment required by Qlik Sense Enterprise on Kubernetes (AKA QSEoK) for a test or Lab environment. The code are open such that anyone can check it before run. 
-
-The resourses creation may have cost impact, base on your subscription with Microsoft Azure.
-
-The resources deletation **does not ask for any confermation.**
-
-Run them at your own risk.
+These scripts are provided for free, and they aim at automating the deployment of Kubernetes cluster on Azure, and the configuration of a Qlik Sense Enterprise on Kubernetes (AKA QSEoK) on it; it is recommended to use these scripts in non-production contexts. 
+The code is available so that anyone can verify its content before running it - run  it at your own risk. Depending on your subscription in Azure, the resources needed to stand up the infrastructure may incur into costs. Caution: the decommissioning script will not require any user confirmation once launched.
 
 ### System requirements
 
-There are a number of command line tools required. You need them to deploy an Azure cluster, install QSEoK and managing the environment even if you do not use these tools. The CLI required are:
+You need to provide a Microsoft Azure account, with a valid subscription assigned.
+
+Also, below a list of required command line tools, used to deploy an Azure cluster, install QSEoK and manage the environment:
 
  - [az](https://docs.microsoft.com/it-it/cli/azure/install-azure-cli?view=azure-cli-latest) 
        - Tested with versions:
@@ -76,13 +76,17 @@ az ad sp create-for-rbac --name ClusterAutomation
 
 and copy/paste the appId, password and tenant into **config.sh** file
 
-There are two configuration file to fill up before run the creation script, those file are:
+The scripts use two configuration files:
 - value.yaml
 - config.sh
 
 ### value.yaml
-The ***value.yaml*** file is required to install the QSEoK. You need to fill up the identity provider section. In order to do that you should complete the IdP configuration according to the [Qlik manual]( https://help.qlik.com/en-US/sense/June2019/Subsystems/PlanningQlikSenseDeployments/Content/Sense_Deployment/auth0-setup.htm), once completed you can replace the **clientId** and **secret** values.
-Replace **YUOR_SERVER** with the DNS name for your QSEoK cluster. For test and Lab environment you can just add the Server name in your **hosts** file; ***AZ_CreateCluster.sh*** will show the cluster IP when the configuration has completed. 
+The ***value.yaml*** file is required to install the QSEoK. 
+You need to fill up the identity provider section. In order to do that you should complete the IdP configuration according to the [Qlik manual]( https://help.qlik.com/en-US/sense/June2019/Subsystems/PlanningQlikSenseDeployments/Content/Sense_Deployment/auth0-setup.htm), and then replace the clientIdand secret values. 
+
+Replace **YUOR_SERVER** with the DNS name for your QSEoK cluster. 
+
+For test and Lab environment you can just add the Server name in your hosts file; the cluster creation script will return the cluster IP when the configuration is complete.
 
 ### config.sh
 The **config.sh** sets the parameters for the Azure cluster:
