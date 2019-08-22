@@ -15,13 +15,23 @@ echo "DEFAULT_RESOURCE_GROUP = "$AZ_DEFAULT_RESOURCE_GROUP
 echo "VM_SIZE = "$AZ_VM_SIZE
 echo "ACCOUNT_NAME = "$AZ_ACCOUNT_NAME
 echo "SKU_TYPES = "$AZ_SKU_TYPES
+echo "LOGIN_MODE="$LOGIN_MODE
 echo "------------------------------------------------------------"
 
 ####################################################################
 
 #Login into Azure account and select the correct subscriptions
 echo "*** 1) Make sure you are logged in to Azure"
-az login
+if [[ "$LOGIN_MODE" == "service-principal" ]] ; then
+    az login --service-principal --username $appId --password $password --tenant $tenant
+    if [ $? -neq 0 ]; then
+        echo "   [ERROR]   Login Error. Check your service-principal credential in the config.sh file. Exit program"
+        exit 99
+    fi    
+else
+    #az login
+fi
+
 echo "   [OK]   Logged in Azure account"
 
 
@@ -88,7 +98,7 @@ az aks create \
 echo "   [OK]   Cluster creation complete"
 
 echo "*** 5) Get Credentials and Configure kubectl"
-az aks get-credentials --resource-group=$AZ_RESOURCE_GROUP_NAME --name=$AZ_CLUSTER_NAME
+az aks get-credentials --resource-group=$AZ_RESOURCE_GROUP_NAME --name=$AZ_CLUSTER_NAME --overwrite-existing
 echo "   [OK]   Credential acquired"
 
 echo "*** 6) Role Based Access Control (RBAC)"
@@ -133,18 +143,24 @@ helm install -n qliksense qlik/qliksense -f ./values.yaml
 echo "   [OK]   Qlik Sense Engine package installed"
 
 
+echo "*** 10) Getting the cluster IP"
+ready=0
+cluster_ip="<none>"
+loadBalancingRow=$(kubectl get services | grep LoadBalancer | awk '{print $4}' | wc -l)
+# <pending>
+while [[  "$cluster_ip" == "<pending>" ]]
+do
+    echo -n "."
+    cluster_ip=$(kubectl get services | grep LoadBalancer | awk '{print $4}')    
+    #loadBalancingRow=$(kubectl get services | grep LoadBalancer | awk '{print $4}' | wc -l)
+    #echo "loadBalancingRow="$loadBalancingRow
+done
+
+echo "   [OK]   Your cluster IP is "$cluster_ip" replace it in your hosts file"
+
 echo ""
 echo "type --> watch kubectl get pods <-- to check the pods' status"
 echo
 
-echo "*** 10) Getting the cluster IP"
-cluster_ip="<none>"
-while [ "$cluster_ip" == "<none>" ]
-do
-    echo -n "."
-    cluster_ip=$(kubectl get services | grep LoadBalancer | awk '{print $4}')    
-done
-
-echo "   [OK]   Your cluster IP is "$cluster_ip" replace it in your hosts file"
 echo "..."
 echo "Script ended. Installation complete"

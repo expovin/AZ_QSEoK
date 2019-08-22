@@ -34,6 +34,15 @@ export AZ_ACCOUNT_NAME="<YOUR_ACCOUNT_NAME>"
 # For Sku types please visit https://docs.microsoft.com/en-us/rest/api/storagerp/srp_sku_types
 export AZ_SKU_TYPES="<YOUR_SKU_TYPE>"
 
+# Select between service-principal | browser-interactive
+export LOGIN_MODE="browser-interactive"
+
+# Service Principal Login
+export appId="<YOUR_PRINCIPAL_APPID>"
+export password="<YOUR_PRINCIPAL_PASSWORD>"
+export tenant="<YOUR_PRINCIPAL_TENANT>"
+
+
 # Copy/Paste here the QSEoK license
 export QS_LICENSE="<YOUR_QSEOK_LICENSE>"
 
