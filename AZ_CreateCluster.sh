@@ -1,5 +1,6 @@
 #!/bin/bash
 
+startTimeScript=`date +%s`
 ###################################################################
 # Setting the environments
 source config.sh
@@ -20,6 +21,8 @@ echo "------------------------------------------------------------"
 
 ####################################################################
 
+source Helper.sh
+
 #Login into Azure account and select the correct subscriptions
 echo "*** 1) Make sure you are logged in to Azure"
 if [[ "$LOGIN_MODE" == "service-principal" ]] ; then
@@ -29,7 +32,7 @@ if [[ "$LOGIN_MODE" == "service-principal" ]] ; then
         exit 99
     fi    
 else
-    #az login
+    az login
 fi
 
 echo "   [OK]   Logged in Azure account"
@@ -146,21 +149,56 @@ echo "   [OK]   Qlik Sense Engine package installed"
 echo "*** 10) Getting the cluster IP"
 ready=0
 cluster_ip="<none>"
-loadBalancingRow=$(kubectl get services | grep LoadBalancer | awk '{print $4}' | wc -l)
-# <pending>
-while [[  "$cluster_ip" == "<pending>" ]]
+
+while [[ $ready -eq 0 ]]
 do
     echo -n "."
     cluster_ip=$(kubectl get services | grep LoadBalancer | awk '{print $4}')    
-    #loadBalancingRow=$(kubectl get services | grep LoadBalancer | awk '{print $4}' | wc -l)
-    #echo "loadBalancingRow="$loadBalancingRow
+    if valid_ip $cluster_ip; then 
+        ready=1
+    fi    
 done
-
+echo " "
 echo "   [OK]   Your cluster IP is "$cluster_ip" replace it in your hosts file"
+az logout
+echo "   [OK]   Logged out from Azure"
+
+endTimeScript=`date +%s`
+runtimeScript=$((endTimeScript-startTimeScript))
+
+if [[ "$LOGIN_MODE" == "service-principal" ]] ; then
+    #If the process is unattended send the email with the IP Address and the config file
+    echo "<h1>QSEoK Cluster Creation</h1>" > $EMAIL_MESSAGE_BODY_FILE
+    echo "QSEoK deployment and installation is complete in $runtimeScript. You need to add this line in your file /etc/hosts" >> $EMAIL_MESSAGE_BODY_FILE
+    echo "<b>$HOST_NAME     $cluster_ip</b>" >> $EMAIL_MESSAGE_BODY_FILE
+    echo " " >> $EMAIL_MESSAGE_BODY_FILE
+    echo "Point your browser to <a href='https://$HOST_NAME/console'>https://$HOST_NAME/console</a> you need to login using the Auth0 application user" >> $EMAIL_MESSAGE_BODY_FILE
+    echo "Once signed in, apply the license as reported below" >> $EMAIL_MESSAGE_BODY_FILE
+    echo "<b>$QS_LICENSE</b>" >> $EMAIL_MESSAGE_BODY_FILE
+
+
+    sendEmail -f $EMAIL_SENDER \
+        -t $EMAIL_RECIPIENTS \
+        -u $EMAIL_SUBJECT_CREATE \
+        -o message-file=$EMAIL_MESSAGE_BODY_FILE \
+        -s $EMAIL_SMTP_SERVER \
+        -xu $EMAIL_USERNAME \
+        -xp $EMAIL_PASSWORD \        
+        -v -o tls=yes -o message-content-type=html
+else
+    # If the process is Supervised try to add the new hots in the /etc/host file
+    echo "  Removing the hostname from /etc/hosts file"
+    ./manage-etc-hosts.sh removeline $HOST_NAME
+    echo "   Add the new entry to /etc/hosts file"
+    ./manage-etc-hosts.sh addline $HOST_NAME $cluster_ip    
+fi
+
 
 echo ""
 echo "type --> watch kubectl get pods <-- to check the pods' status"
 echo
+
+
 
 echo "..."
 echo "Script ended. Installation complete"
