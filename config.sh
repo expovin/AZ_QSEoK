@@ -49,6 +49,7 @@ export EMAIL_SENDER="<EMAIL SENDER ADDRESS>"
 export EMAIL_RECIPIENTS="<EMAIL RECIPIENTS>"
 export EMAIL_SUBJECT_CREATE="<EMAIL SUBJECT CREATION>"
 export EMAIL_SUBJECT_DESTROY="<EMAIL SUBJECT DELETATION>"
+export EMAIL_SUBJECT_ERRORCRE="<EMAIL SUBJECT DESTROY>"
 export EMAIL_MESSAGE_BODY_FILE="<MESSAGE_BODY_FILE>"
 export EMAIL_SMTP_SERVER="<SMTP_SERVER[:SMTP_PORT]>"
 export EMAIL_USERNAME="<SMTP_USERNAME>"
@@ -56,5 +57,5 @@ export EMAIL_PASSWORD="<SMTP_PASSWORD>"
 
 # Copy/Paste here the QSEoK license
 export QS_LICENSE="<YOUR_QSEOK_LICENSE>"
-
+export LOG_FILE="./lastExecution.log"
 ###############################################################################################

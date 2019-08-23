@@ -17,6 +17,19 @@
     return $stat
 }
 
+function error_handling()
+{
 
+    sendEmail -f \""$EMAIL_SENDER\""\
+        -t "$EMAIL_RECIPIENTS"\
+        -u \""$EMAIL_SUBJECT_ERRORCRE\""\
+        -o message-file="$EMAIL_MESSAGE_BODY_FILE"\
+        -s "$EMAIL_SMTP_SERVER"\
+        -xu "$EMAIL_USERNAME" -xp "$EMAIL_PASSWORD" -a "$LOG_FILE"\
+        -v -o tls=yes -o message-content-type=html 2>&1 | tee -a $LOG_FILE
+
+
+    exit 100
+}
 
 
