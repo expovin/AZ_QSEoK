@@ -41,7 +41,13 @@ echo "   [OK]   Logged in Azure account"
 
 echo "*** 2) Enable AKS for your Azure account"
 az account set --subscription "$AZ_SUBSCRIPTION"
-echo "===>" $AZ_SUBSCRIPTION "subscription selected"
+if [ $? -eq 0 ]; then
+    echo "   [OK]   " $AZ_SUBSCRIPTION "subscription selected"
+else
+    echo "   [ERROR]   while selecting subscription" $AZ_SUBSCRIPTION ". Exit program"
+    exit 101
+fi
+
 
 az provider register -n Microsoft.ContainerService
 az provider register -n Microsoft.Compute
@@ -87,7 +93,13 @@ done
 
 echo "*** 3) Create a Resource Group"
 az group create --name $AZ_RESOURCE_GROUP_NAME --location $AZ_LOCATION
-echo "   [OK]   Resource group "$AZ_RESOURCE_GROUP_NAME" has been created in "$AZ_LOCATION
+if [ $? -eq 0 ]; then
+    echo "   [OK]   Resource group "$AZ_RESOURCE_GROUP_NAME" has been created in "$AZ_LOCATION
+else
+    echo "   [ERROR]   while selecting resource group" $AZ_RESOURCE_GROUP_NAME "in region $AZ_LOCATION. Exit program"
+    exit 101
+fi
+
 
 echo "*** 4) Create the Cluster"
 echo "***    This command will take around 15-20 minutes to run. You can also monitor progress in the Azure Portal."
@@ -97,18 +109,36 @@ az aks create \
     --node-count $AZ_NODE_COUNT \
     --generate-ssh-keys \
     --node-vm-size $AZ_VM_SIZE
+if [ $? -eq 0 ]; then
+    echo "   [OK]   Cluster creation complete"
+else
+    echo "   [ERROR]   while selecting Cluster Exit program"
+    exit 101
+fi
 
-echo "   [OK]   Cluster creation complete"
+
 
 echo "*** 5) Get Credentials and Configure kubectl"
 az aks get-credentials --resource-group=$AZ_RESOURCE_GROUP_NAME --name=$AZ_CLUSTER_NAME --overwrite-existing
-echo "   [OK]   Credential acquired"
+if [ $? -eq 0 ]; then
+    echo "   [OK]   Credential acquired"
+else
+    echo "   [ERROR]   while getting credential. Exit Program"
+    exit 101
+fi
+
+
 
 echo "*** 6) Role Based Access Control (RBAC)"
 kubectl create -f ./rbac-config.yaml
 echo "   [OK]   Service account for Tiller created and binded it to the ClusterRole"
 helm init --upgrade --service-account tiller --wait
-echo "   [OK]   HELM initialized"
+if [ $? -eq 0 ]; then
+    echo "   [OK]   HELM initialized"
+else
+    echo "   [ERROR]   while initializing HELM. Exit Program"
+    exit 101
+fi
 
 echo "Looking for resource group "$AZ_DEFAULT_RESOURCE_GROUP
 foundResourceGroup=$(az group list -o table | grep $AZ_DEFAULT_RESOURCE_GROUP | wc -l)
@@ -116,34 +146,72 @@ if [[  $foundResourceGroup -eq 1 ]] ;  then
     echo "   [OK]   Resource group found"
 else 
     echo "   [OK]   [WARNING] Default Resource group not found. Please insert the name"
+    exit 101
 fi
 
 
 echo "*** 7) Create a Storage Account"
 az storage account create -g $AZ_DEFAULT_RESOURCE_GROUP -n $AZ_ACCOUNT_NAME --sku $AZ_SKU_TYPES
-echo "   [OK]   Storage Account created"
+if [ $? -eq 0 ]; then
+    echo "   [OK]   Storage Account created"
+else
+    echo "   [ERROR]   while creating Storage account. Exit Program"
+    exit 101
+fi
+
 
 echo "*** 8) Azure Storage"
 kubectl create clusterrole system:azure-cloud-provider --verb=get,create --resource=secrets
-echo "   [OK]   Cluster role that can create secrets created"
+if [ $? -eq 0 ]; then
+    echo "   [OK]   Cluster role that can create secrets created"
+else
+    echo "   [ERROR]   while creating custom role. Exit Program"
+    exit 101
+fi
+
 
 kubectl create clusterrolebinding system:azure-cloud-provider --clusterrole=system:azure-cloud-provider --serviceaccount=kube-system:persistent-volume-binder
-echo "   [OK]   Cluster role binded"
+if [ $? -eq 0 ]; then
+    echo "   [OK]   Cluster role binded"
+else
+    echo "   [ERROR]   while creating cluster binding. Exit Program"
+    exit 101
+fi
+
+
 
 kubectl apply -f azure-sc.yaml
 echo "   [OK]   Class Storage Created"
 
 echo "*** 9) Install QSEoK"
 helm repo add qlik https://qlik.bintray.com/stable
-echo "   [OK]   Add Qlik stable repo to helm"
+if [ $? -eq 0 ]; then
+    echo "   [OK]   Add Qlik stable repo to helm"
+else
+    echo "   [ERROR]   while adding Qlik Stable repo to HELM. Exit Program"
+    exit 101
+fi
+
 
 helm repo update
 echo "   [OK]   Update helm repos"
 helm install --name qliksense-init qlik/qliksense-init
-echo "   [OK]   Custom resource definitions used by dynamic engines installed"
+if [ $? -eq 0 ]; then
+    echo "   [OK]   Custom resource definitions used by dynamic engines installed"
+else
+    echo "   [ERROR]   while installing custom resource definition. Exit Program"
+    exit 101
+fi
+
 
 helm install -n qliksense qlik/qliksense -f ./values.yaml
-echo "   [OK]   Qlik Sense Engine package installed"
+if [ $? -eq 0 ]; then
+    echo "   [OK]   Qlik Sense Engine package installed"
+else
+    echo "   [ERROR]   while installing qliksense. Exit Program"
+    exit 101
+fi
+
 
 
 echo "*** 10) Getting the cluster IP"
@@ -201,4 +269,4 @@ echo
 
 
 echo "..."
-echo "Script ended. Installation complete"
+echo "Script ended in $runtimeScript. Installation complete"
