@@ -22,15 +22,20 @@ Below a brief explanation of the macro steps performed by each component/script:
       - Install Qlik Sense Engine package
 11. Get the cluster IP
 
+When run in Supervised mode the procedure attempt to add a line with the Host and the cluster IP in the hosts file (root password is required).
+When run in Unattended mode the procedure will send an email (email section need to fill out) with the cluster IP address
+
 ***AZ_DestroyCluster.sh***
+- Login into azure account (supervised or unattended mode)
+- Purge QSEoK deployments
 - Destroy all resources belonging to the same RESOURCE_GROUP.
+- Send email when complete or attempt to delete the host line from hosts file (root password is required).
 
 ### Disclaimer
 These scripts are provided for free, and they aim at automating the deployment of Kubernetes cluster on Azure, and the configuration of a Qlik Sense Enterprise on Kubernetes (AKA QSEoK) on it; it is recommended to use these scripts in non-production contexts. 
 The code is available so that anyone can verify its content before running it - run  it at your own risk. Depending on your subscription in Azure, the resources needed to stand up the infrastructure may incur into costs. Caution: the decommissioning script will not require any user confirmation once launched.
 
 ### System requirements
-
 You need to provide a Microsoft Azure account, with a valid subscription assigned.
 
 Also, below a list of required command line tools, used to deploy an Azure cluster, install QSEoK and manage the environment:
@@ -111,3 +116,5 @@ az ad sp create-for-rbac --name ClusterAutomation
 ```
 
 and copy/paste the appId, password and tenant into **config.sh** file
+
+***All Email section*** when filled, allow the procedure to send out the email with useful informations (e.g. Procedure completed, Cluster IP Address, next Step to run)
